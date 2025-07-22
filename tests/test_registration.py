@@ -1,7 +1,7 @@
 import pytest
-import time
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 from web_locators.locators import *
 from data.urls import Urls
@@ -31,13 +31,15 @@ class TestStellarBurgersRegistration:
         driver.find_element(*AuthRegistre.ar_email_field).send_keys('Артур@yan.ru')
         driver.find_element(*AuthRegistre.ar_password_field).send_keys('1234567')
 
-        driver.find_element(*AuthRegistre.ar_register_button).click()
-        WebDriverWait(driver, 5).until(EC.element_to_be_clickable(AuthRegistre.ar_register_button))
-        time.sleep(2)
+        register_button = driver.find_element(*AuthRegistre.ar_register_button)
+        register_button.click()
+        
+        WebDriverWait(driver, 5).until(
+            lambda d: d.current_url == Urls.url_register
+        )
+        
         errors_messages = driver.find_elements(*AuthRegistre.ar_error_message)
-
-        assert driver.current_url == Urls.url_register and len(errors_messages) == 0
-
+        assert len(errors_messages) == 0
 
     @pytest.mark.parametrize('email_list', ['Артур@yanru', 'Артур.ru', 'Арт у р@yan.ru', 'Артур@ya n.ru',
                                             '@yan.ru', 'Артур@.ru', 'Артур@yan.'])
@@ -50,7 +52,7 @@ class TestStellarBurgersRegistration:
         driver.find_element(*AuthRegistre.ar_password_field).send_keys('123456')
 
         driver.find_element(*AuthRegistre.ar_register_button).click()
-        WebDriverWait(driver, 5).until(EC.presence_of_element_located(AuthRegistre.ar_error_message_2))
+        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(AuthRegistre.ar_error_message_2))
         error_message = driver.find_element(*AuthRegistre.ar_error_message_2)
 
         assert error_message.text == 'Такой пользователь уже существует'
@@ -65,7 +67,7 @@ class TestStellarBurgersRegistration:
         driver.find_element(*AuthRegistre.ar_password_field).send_keys(password_list)
 
         driver.find_element(*AuthRegistre.ar_register_button).click()
-        WebDriverWait(driver, 5).until(EC.presence_of_element_located(AuthRegistre.ar_error_message))
+        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(AuthRegistre.ar_error_message))
         error_message = driver.find_element(*AuthRegistre.ar_error_message)
 
         assert error_message.text == 'Некорректный пароль'

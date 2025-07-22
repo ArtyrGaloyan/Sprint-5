@@ -26,7 +26,7 @@ class TestStellarBurgersProfileForm:
         WebDriverWait(driver, 3).until(EC.presence_of_element_located(LKProfile.lk_info_message))
         driver.find_element(*MainPage.mn_constructor_button).click()
 
-        h1_tag = driver.find_elements(By.XPATH, ".//h1")
+        h1_tag = driver.find_elements(*MainPage.mn_h1_header)
         assert len(h1_tag) > 0 and h1_tag[0].text == 'Соберите бургер'
 
     def test_click_logo_button_show_constructor_form(self, login):
@@ -38,7 +38,7 @@ class TestStellarBurgersProfileForm:
         WebDriverWait(driver, 3).until(EC.presence_of_element_located(LKProfile.lk_info_message))
         driver.find_element(*MainPage.mn_logo).click()
 
-        h1_tag = driver.find_elements(By.XPATH, ".//h1")
+        h1_tag = driver.find_elements(*MainPage.mn_h1_header)
         assert len(h1_tag) > 0 and h1_tag[0].text == 'Соберите бургер'
 
     def test_click_logout_button_in_lk_open_login_form(self, login):

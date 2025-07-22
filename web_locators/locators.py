@@ -7,6 +7,7 @@ class MainPage:
     mn_order_button = (By.XPATH, ".//button[text()='Оформить заказ']")
     mn_constructor_button = (By.XPATH, ".//p[text()='Конструктор']")
     mn_logo = (By.XPATH, ".//div[@class='AppHeader_header__logo__2D0X2']")
+    mn_h1_header = (By.XPATH, ".//h1")
 
     mn_sauces_button = (By.XPATH, ".//span[text()='Соусы']/parent::*")
     mn_h_sauces = By.XPATH, ".//h2[@class='text text_type_main-medium mb-6 mt-10' and text()='Соусы']"
