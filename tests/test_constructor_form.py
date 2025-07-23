@@ -1,47 +1,51 @@
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from web_locators.locators import *
 
+class TestStellarBurgersConstructorSections:
+    """Тесты разделов конструктора бургеров"""
 
-class TestStellarBurgersConstructorForm:
-
-    def test_constructor_go_to_sauces_scroll_to_sauces(self, login):
-        """Проверка перехода на "Соусы" """
-        driver = login
-
-        driver.find_element(*MainPage.mn_constructor_button).click()
-        driver.find_element(*MainPage.mn_sauces_button).click()
+    def test_switch_to_buns_section(self, driver):
+        """Проверка перехода к разделу 'Булки'"""
+        driver.get(Urls.url_main_page)
         
-        # Verify sauces tab is active
-        sauces_tab = driver.find_element(*MainPage.mn_sauces_button)
-        assert "tab_tab_type_current" in sauces_tab.get_attribute("class"), "Sauces tab is not active"
+        # Переходим сначала в другой раздел
+        driver.find_element(*ConstructorPage.sauces_section).click()
+        WebDriverWait(driver, 5).until(
+            EC.visibility_of_element_located(ConstructorPage.active_section)
+        )
         
-        h_sauce = driver.find_element(*MainPage.mn_h_sauces)
-        assert h_sauce.text == 'Соусы'
+        # Переход в раздел "Булки"
+        driver.find_element(*ConstructorPage.buns_section).click()
+        
+        # Проверка активного раздела
+        active_section = WebDriverWait(driver, 5).until(
+            EC.visibility_of_element_located(ConstructorPage.active_section)
+        )
+        assert active_section.text == 'Булки', "Раздел 'Булки' не стал активным"
 
-    def test_constructor_go_to_filling_scroll_to_filling(self, login):
-        """Проверка перехода на "Начинки" """
-        driver = login
+    def test_switch_to_sauces_section(self, driver):
+        """Проверка перехода к разделу 'Соусы'"""
+        driver.get(Urls.url_main_page)
+        
+        # Переход в раздел "Соусы"
+        driver.find_element(*ConstructorPage.sauces_section).click()
+        
+        # Проверка активного раздела
+        active_section = WebDriverWait(driver, 5).until(
+            EC.visibility_of_element_located(ConstructorPage.active_section)
+        )
+        assert active_section.text == 'Соусы', "Раздел 'Соусы' не стал активным"
 
-        driver.find_element(*MainPage.mn_constructor_button).click()
-        driver.find_element(*MainPage.mn_filling_button).click()
+    def test_switch_to_toppings_section(self, driver):
+        """Проверка перехода к разделу 'Начинки'"""
+        driver.get(Urls.url_main_page)
         
-        # Verify filling tab is active
-        filling_tab = driver.find_element(*MainPage.mn_filling_button)
-        assert "tab_tab_type_current" in filling_tab.get_attribute("class"), "Filling tab is not active"
+        # Переход в раздел "Начинки"
+        driver.find_element(*ConstructorPage.toppings_section).click()
         
-        h_filling = driver.find_element(*MainPage.mn_h_filling)
-        assert h_filling.text == 'Начинки'
-
-    def test_constructor_go_to_bun_scroll_to_bun(self, login):
-        """Проверка перехода на "Булки" """
-        driver = login
-
-        driver.find_element(*MainPage.mn_constructor_button).click()
-        driver.find_element(*MainPage.mn_filling_button).click()
-        driver.find_element(*MainPage.mn_ban_button).click()
-        
-        # Verify bun tab is active
-        bun_tab = driver.find_element(*MainPage.mn_ban_button)
-        assert "tab_tab_type_current" in bun_tab.get_attribute("class"), "Bun tab is not active"
-        
-        h_ban = driver.find_element(*MainPage.mn_h_ban)
-        assert h_ban.text == 'Булки'
+        # Проверка активного раздела
+        active_section = WebDriverWait(driver, 5).until(
+            EC.visibility_of_element_located(ConstructorPage.active_section)
+        )
+        assert active_section.text == 'Начинки', "Раздел 'Начинки' не стал активным"
